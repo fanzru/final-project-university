@@ -1,7 +1,8 @@
 # **Final Project University**
 
-> Bachelor Informatics, Telkom University
+Final project journey to get Bachelor Degree of Computer Science with domain topic  `Text Summarization`.
 
-final project domain topic is `Text Summarization`.
+Stacks : Golang, MySQL, Nginx, Ubuntu...
 
-stacks : Golang
+> "Otw Get Computer Science, Telkom University"
+> Ananda Affan Fattahila
