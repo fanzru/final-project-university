@@ -25,7 +25,6 @@ func ResponseSuccessOK(ctx echo.Context, data interface{}) error {
 }
 
 func ResponseErrorUnauthorized(ctx echo.Context) error {
-	// todo: add logger before response
 	return ctx.JSON(http.StatusUnauthorized, ErrorMessage{
 		Code: http.StatusUnauthorized,
 		Error: &ErrorFormat{

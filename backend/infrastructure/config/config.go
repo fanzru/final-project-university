@@ -11,7 +11,8 @@ import (
 
 type Config struct {
 	Database          Database
-	IntBycrptPassword int `env:"INT_BYCRPT_PASSWORD" validate:"required"`
+	IntBycrptPassword int    `env:"INT_BYCRPT_PASSWORD" validate:"required"`
+	JWTTokenSecret    string `env:"JWT_TOKEN_SECRET" validate:"required"`
 }
 
 type Database struct {
@@ -49,5 +50,7 @@ func New() (Config, error) {
 	}
 	Config.IntBycrptPassword = Int
 
+	// jwt token secret
+	Config.JWTTokenSecret = os.Getenv("JWT_TOKEN")
 	return Config, nil
 }

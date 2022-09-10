@@ -39,8 +39,28 @@ func (h AccountHandler) Register(ctx echo.Context) error {
 	return response.ResponseSuccessCreated(ctx, nil)
 }
 
-func (a AccountHandler) Login(ctx echo.Context) error {
-	return response.ResponseSuccessOK(ctx, nil)
+func (h *AccountHandler) Login(ctx echo.Context) error {
+	userLoginReq := &request.UserLoginReq{}
+
+	err := ctx.Bind(userLoginReq)
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+	err = validator.New().Struct(userLoginReq)
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+
+	token, err := h.AccountsApp.UserLogin(ctx, request.UserLoginReq{
+		Email:    userLoginReq.Email,
+		Password: userLoginReq.Password,
+	})
+
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+
+	return response.ResponseSuccessOK(ctx, token)
 }
 
 func (a AccountHandler) Profile(ctx echo.Context) error {

@@ -23,24 +23,17 @@ func New(a AccountsRepo) AccountsRepo {
 	return a
 }
 
-func (i *AccountsRepo) CheckUserWithEmail(ctx echo.Context, email string) (bool, error) {
-	user := models.User{}
-	result := i.MySQL.DB.Table("users").Where("email = ?", email).First(&user)
-	if result.Error != nil {
-		return false, result.Error
-	}
-
-	return true, nil
-}
-
 func (i *AccountsRepo) GetUserByEmail(ctx echo.Context, email string) (models.User, error) {
-	user := models.User{}
+	var user models.User
 	result := i.MySQL.DB.Table("users").Where("email = ?", email).First(&user)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
-			return models.User{}, errs.ErrInstanceNotFound
+			return user, errs.ErrInstanceNotFound
 		}
-		return models.User{}, result.Error
+		return user, result.Error
+	}
+	if result.RowsAffected < 1 {
+		return user, errs.ErrInstanceNotFound
 	}
 	return user, nil
 }

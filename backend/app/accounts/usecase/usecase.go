@@ -4,10 +4,11 @@ import (
 	errs "backend/app/accounts/domain/errors"
 	"backend/app/accounts/domain/models"
 	"backend/app/accounts/domain/request"
+	"backend/app/accounts/domain/response"
 	"backend/app/accounts/repo"
 	"backend/infrastructure/config"
+	"backend/pkg/jwt"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -28,7 +29,7 @@ func New(accounts AccountsApp) AccountsApp {
 }
 
 func (i *AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterReq) error {
-	user, err := i.AccountsRepo.GetUserByEmail(ctx, param.Email)
+	_, err := i.AccountsRepo.GetUserByEmail(ctx, param.Email)
 	if err == nil {
 		return errs.ErrEmailUsed
 	}
@@ -36,11 +37,11 @@ func (i *AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterR
 		return err
 	}
 
-	cryptPass, err := bcrypt.GenerateFromPassword([]byte(user.Password), i.Cfg.IntBycrptPassword)
+	cryptPass, err := bcrypt.GenerateFromPassword([]byte(param.Password), i.Cfg.IntBycrptPassword)
 	if err != nil {
 		return err
 	}
-	log.Println("--------------------------------")
+
 	_, err = i.AccountsRepo.CreateUser(models.User{
 		ID:        0,
 		Name:      param.Name,
@@ -52,4 +53,24 @@ func (i *AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterR
 		return err
 	}
 	return nil
+}
+
+func (i *AccountsApp) UserLogin(ctx echo.Context, param request.UserLoginReq) (*response.UserLoginRes, error) {
+	user, err := i.AccountsRepo.GetUserByEmail(ctx, param.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(param.Password))
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := jwt.EncodeToken(user.ID, user.Email, i.Cfg.JWTTokenSecret)
+	if err != nil {
+		return nil, err
+	}
+	return &response.UserLoginRes{
+		AccessToken: token,
+	}, nil
 }
