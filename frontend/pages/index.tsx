@@ -6,7 +6,7 @@ const Home: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
-        <title>Create Next App</title>
+        <title>Fanzru - Final Project University</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -18,12 +18,12 @@ const Home: NextPage = () => {
           </a>
         </h1>
 
-        <p className="mt-3 text-2xl">
+        <p className="mt-3 mb-2 text-xl">
         {`This website is under construction `}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            Stay Tune Guys.
-          </code>
         </p>
+        <code className="rounded-md bg-gray-100 p-2 font-mono text-xs">
+            Stay Tune Guys.
+        </code>
 
         <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
          
