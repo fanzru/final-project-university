@@ -1,0 +1,8 @@
+{
+  "apps": [
+    {
+      "name": "frontend - final project university",
+      "script": "yarn start"
+    }
+  ]
+}
