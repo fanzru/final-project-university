@@ -22,5 +22,13 @@ func NewRoutes(h ModuleHandler, app *echo.Echo) *echo.Echo {
 		return c.String(http.StatusOK, "FANZRU PASTI LULUS S1 INFORMATIKA 200 OK")
 	})
 
+	// accounts
+	accounts := app.Group("/accounts")
+	accounts.POST("/login", h.AccountHandler.Login)
+	accounts.POST("/register", h.AccountHandler.Register)
+	accounts.GET("/profile", h.AccountHandler.Profile)
+
+	//grobid
+
 	return app
 }
