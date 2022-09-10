@@ -23,10 +23,15 @@ func main() {
 		log.Fatalf("Failed to connect database: %v", err)
 	}
 
-	accountsHandler := services.RegisterService(db, cfg)
+	// middleware
+	middlewareAuth := services.RegisterMiddleware(db, cfg)
+
+	// services
+	accountsHandler := services.RegisterServiceAccounts(db, cfg)
 
 	mHandler := routes.ModuleHandler{
 		AccountHandler: accountsHandler,
+		MiddlewareAuth: middlewareAuth,
 	}
 
 	e := echo.New()

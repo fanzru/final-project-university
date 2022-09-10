@@ -12,7 +12,7 @@ import (
 
 type Impl interface {
 	GetUserByEmail(ctx echo.Context, email string) (models.User, error)
-	CreateUser(user models.User) (models.User, error)
+	CreateUser(ctx echo.Context, user models.User) (models.User, error)
 }
 type AccountsRepo struct {
 	MySQL database.Connection
@@ -38,10 +38,19 @@ func (i *AccountsRepo) GetUserByEmail(ctx echo.Context, email string) (models.Us
 	return user, nil
 }
 
-func (i *AccountsRepo) CreateUser(user models.User) (models.User, error) {
+func (i *AccountsRepo) CreateUser(ctx echo.Context, user models.User) (models.User, error) {
 	result := i.MySQL.DB.Table("users").Create(&user)
 	if result.Error != nil {
 		return user, result.Error
+	}
+	return user, nil
+}
+
+func (i *AccountsRepo) GetUserProfile(ctx echo.Context) (*models.User, error) {
+	user := &models.User{}
+	result := i.MySQL.DB.Table("users").Where("id = ?", ctx.Get("user_id")).First(&user)
+	if result.Error != nil {
+		return nil, result.Error
 	}
 	return user, nil
 }

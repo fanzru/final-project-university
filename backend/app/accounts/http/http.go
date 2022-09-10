@@ -64,5 +64,9 @@ func (h *AccountHandler) Login(ctx echo.Context) error {
 }
 
 func (a AccountHandler) Profile(ctx echo.Context) error {
-	return response.ResponseSuccessOK(ctx, nil)
+	res, err := a.AccountsApp.UserProfile(ctx)
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+	return response.ResponseSuccessOK(ctx, res)
 }

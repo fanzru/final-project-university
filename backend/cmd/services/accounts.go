@@ -8,8 +8,7 @@ import (
 	"backend/infrastructure/database"
 )
 
-func RegisterService(db database.Connection, cfg config.Config) accountshandler.AccountHandler {
-
+func RegisterServiceAccounts(db database.Connection, cfg config.Config) accountshandler.AccountHandler {
 	accountsDB := accountsrepo.New(accountsrepo.AccountsRepo{
 		MySQL: db,
 		Cfg:   cfg,

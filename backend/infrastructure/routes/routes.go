@@ -5,12 +5,14 @@ import (
 	"net/http"
 
 	accounts "backend/app/accounts/http"
+	"backend/infrastructure/middleware"
 
 	"github.com/labstack/echo/v4"
 )
 
 type ModuleHandler struct {
 	AccountHandler accounts.AccountHandler
+	MiddlewareAuth middleware.MiddlewareAuth
 }
 
 func NewRoutes(h ModuleHandler, app *echo.Echo) *echo.Echo {
@@ -26,9 +28,8 @@ func NewRoutes(h ModuleHandler, app *echo.Echo) *echo.Echo {
 	accounts := app.Group("/accounts")
 	accounts.POST("/login", h.AccountHandler.Login)
 	accounts.POST("/register", h.AccountHandler.Register)
-	accounts.GET("/profile", h.AccountHandler.Profile)
+	accounts.GET("/profile", h.MiddlewareAuth.BearerTokenMiddleware(h.AccountHandler.Profile))
 
 	//grobid
-
 	return app
 }

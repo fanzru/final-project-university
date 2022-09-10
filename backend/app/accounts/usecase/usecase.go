@@ -17,6 +17,7 @@ import (
 
 type Impl interface {
 	UserRegister(ctx echo.Context, param request.UserRegisterReq) error
+	UserLogin(ctx echo.Context, param request.UserLoginReq) (*response.UserLoginRes, error)
 }
 
 type AccountsApp struct {
@@ -28,7 +29,7 @@ func New(accounts AccountsApp) AccountsApp {
 	return accounts
 }
 
-func (i *AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterReq) error {
+func (i AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterReq) error {
 	_, err := i.AccountsRepo.GetUserByEmail(ctx, param.Email)
 	if err == nil {
 		return errs.ErrEmailUsed
@@ -42,7 +43,7 @@ func (i *AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterR
 		return err
 	}
 
-	_, err = i.AccountsRepo.CreateUser(models.User{
+	_, err = i.AccountsRepo.CreateUser(ctx, models.User{
 		ID:        0,
 		Name:      param.Name,
 		Email:     param.Email,
@@ -55,7 +56,7 @@ func (i *AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterR
 	return nil
 }
 
-func (i *AccountsApp) UserLogin(ctx echo.Context, param request.UserLoginReq) (*response.UserLoginRes, error) {
+func (i AccountsApp) UserLogin(ctx echo.Context, param request.UserLoginReq) (*response.UserLoginRes, error) {
 	user, err := i.AccountsRepo.GetUserByEmail(ctx, param.Email)
 	if err != nil {
 		return nil, err
@@ -73,4 +74,22 @@ func (i *AccountsApp) UserLogin(ctx echo.Context, param request.UserLoginReq) (*
 	return &response.UserLoginRes{
 		AccessToken: token,
 	}, nil
+}
+
+func (i AccountsApp) UserProfile(ctx echo.Context) (*response.UserProfileRes, error) {
+	user, err := i.AccountsRepo.GetUserProfile(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	userProfileRes := &response.UserProfileRes{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		PhotoUrl:  user.PhotoUrl,
+		CreatedAt: user.CreatedAt,
+		DeletedAt: user.DeletedAt,
+	}
+
+	return userProfileRes, nil
 }
