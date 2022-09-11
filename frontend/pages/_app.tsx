@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return <div>
     <NextSeo
       title="Fanzru - Final Project University"
-      description="Jangan lupa berusahaan walaupun belum tentu berhasil karena menyerah sama saja dengan kalah."
+      description="Jangan lupa berusaha walaupun belum tentu berhasil karena menyerah sama saja dengan kalah - Fanzru"
       openGraph={{
         type: 'website',
         url: 'https://skripsi.fanzru.dev/',
