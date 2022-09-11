@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         url: 'https://skripsi.fanzru.dev/',
         title: 'Fanzru - Final Project University',
         description:
-          'Jangan lupa berusahaan walaupun belum tentu berhasil karena menyerah sama saja dengan kalah',
+          'Jangan lupa berusaha walaupun belum tentu berhasil karena menyerah sama saja dengan kalah - Fanzru',
         images: [
           {
             url: '/default.jpeg',
