@@ -1,26 +1,72 @@
 import '../styles/globals.css'
+import '../styles/layer.css'
 import type { AppProps } from 'next/app'
 import Script from 'next/script';
 import { NextSeo } from 'next-seo';
-function MyApp({ Component, pageProps }: AppProps) {
+import { MantineProvider } from '@mantine/core';
+import { ThemeProvider } from 'next-themes';
+import clsx from 'clsx';
+import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+  m,
+} from 'framer-motion';
+import Navbar from '../components/navbar/index';
+import { Router } from 'next/router';
+import NProgress from 'nprogress';
+import '../styles/nprogress.css';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
+
+import { variants } from '../animations/variants';
+
+function MyApp({ Component, pageProps,router }: AppProps) {
   return <div>
-    <NextSeo
-      title="Fanzru - Final Project University"
-      description="Jangan lupa berusaha walaupun belum tentu berhasil karena menyerah sama saja dengan kalah - Fanzru"
-      openGraph={{
-        type: 'website',
-        url: 'https://skripsi.fanzru.dev/',
-        title: 'Fanzru - Final Project University',
-        description:
-          'Jangan lupa berusaha walaupun belum tentu berhasil karena menyerah sama saja dengan kalah - Fanzru',
-        images: [
-          {
-            url: '/default.jpeg',
-          },
-        ],
-      }}
-    />
-    <Component {...pageProps} />
+    <ThemeProvider defaultTheme='white' attribute='class'>
+      <NextSeo
+        title="Fanzru - Final Project University"
+        description="Jangan lupa berusaha walaupun belum tentu berhasil karena menyerah sama saja dengan kalah - Fanzru"
+        openGraph={{
+          type: 'website',
+          url: 'https://skripsi.fanzru.dev/',
+          title: 'Fanzru - Final Project University',
+          description:
+            'Jangan lupa berusaha walaupun belum tentu berhasil karena menyerah sama saja dengan kalah - Fanzru',
+          images: [
+            {
+              url: '/default.jpeg',
+            },
+          ],
+        }}
+      />
+      <LazyMotion features={domAnimation}>
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+          <div className="min-h-screen flex flex-col h-full">
+            <Navbar/>
+            <AnimatePresence
+              mode='wait'
+              initial={false}
+              onExitComplete={() => window.scrollTo(0, 0)}
+            >
+              <m.div
+                key={router.asPath}
+                variants={variants}
+                initial='hidden'
+                animate='enter'
+                exit='exit'
+                transition={{ ease: 'easeInOut', duration: 0.5 }}
+                className={clsx('flex flex-col h-full flex-grow')}
+              >
+                <Component {...pageProps} />
+              </m.div>
+            </AnimatePresence>
+          </div>
+        </MantineProvider>
+      </LazyMotion>
+    </ThemeProvider>
   </div>
 }
 

@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const Home: NextPage = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="flex min-h-screen flex-col items-center justify-center py-2 ">
       <Head>
         <title>Fanzru - Final Project University</title>
         <link rel="icon" href="/favicon.ico" />
@@ -21,7 +21,7 @@ const Home: NextPage = () => {
         <p className="mt-3 mb-2 text-xl">
         {`This website is under construction `}
         </p>
-        <code className="rounded-md bg-gray-100 p-2 font-mono text-xs">
+        <code className="rounded-md bg-gray-100 p-2 font-mono text-xs dark:text-black">
             Stay Tune Guys.
         </code>
 
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         </div>
       </main>
 
-      <footer className="flex h-24 w-full items-center justify-center border-t">
+      <footer className="flex h-12 w-full items-center justify-center border-t-2 border-dashed">
         <a
           className="flex items-center justify-center gap-2"
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
