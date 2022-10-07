@@ -28,8 +28,10 @@ func main() {
 
 	// services
 	accountsHandler := services.RegisterServiceAccounts(db, cfg)
+	grobidHandler := services.RegisterServiceGrobid(db, cfg)
 
 	mHandler := routes.ModuleHandler{
+		GrobidHandler:  grobidHandler,
 		AccountHandler: accountsHandler,
 		MiddlewareAuth: middlewareAuth,
 	}

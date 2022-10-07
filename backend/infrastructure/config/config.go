@@ -11,8 +11,13 @@ import (
 
 type Config struct {
 	Database          Database
+	Grobid            Grobid
 	IntBycrptPassword int    `env:"INT_BYCRPT_PASSWORD" validate:"required"`
 	JWTTokenSecret    string `env:"JWT_TOKEN_SECRET" validate:"required"`
+}
+
+type Grobid struct {
+	GrobidUrlPdfToTei string `env:"GROBID_URL_PDF_TO_TEI" validate:"required"`
 }
 
 type Database struct {
@@ -52,5 +57,9 @@ func New() (Config, error) {
 
 	// jwt token secret
 	Config.JWTTokenSecret = os.Getenv("JWT_TOKEN")
+
+	// Grobid Service
+	Config.Grobid.GrobidUrlPdfToTei = os.Getenv("GROBID_URL_PDF_TO_TEI")
+
 	return Config, nil
 }

@@ -1,15 +1,82 @@
 package usecase
 
 import (
+	"backend/app/grobid/domain/param"
 	"backend/app/grobid/repo"
 	"backend/infrastructure/config"
+	"bytes"
+	"crypto/tls"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"os"
+
+	"github.com/go-resty/resty/v2"
+	"github.com/labstack/echo/v4"
 )
+
+type Impl interface {
+	PdfToTeiParse(ctx echo.Context, Param param.GrobidUploadParam) error
+}
 
 type GrobidApp struct {
 	GrobidRepo repo.GrobidRepo
 	Cfg        config.Config
 }
 
-func New(accounts GrobidApp) GrobidApp {
-	return accounts
+func New(g GrobidApp) GrobidApp {
+	return g
+}
+
+func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, Param param.GrobidUploadParam) error {
+
+	src, err := Param.PdfFile.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	srcFile := "../../../temp" + Param.PdfFile.Filename
+	dst, err := os.Create(srcFile)
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+	defer os.Remove(srcFile)
+
+	// Copy
+	if _, err = io.Copy(dst, src); err != nil {
+		return err
+	}
+
+	// Read file
+	fileBytes, err := ioutil.ReadFile(srcFile)
+	if err != nil {
+		return err
+	}
+
+	client := resty.New()
+	client.SetDisableWarn(true)
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client.SetTransport(tr)
+	_, err = client.R().
+		SetMultipartFields(
+			&resty.MultipartField{
+				Param:       "input",
+				FileName:    srcFile,
+				ContentType: "application/pdf",
+				Reader:      bytes.NewReader(fileBytes),
+			}).
+		SetContentLength(true).
+		Post(g.Cfg.Grobid.GrobidUrlPdfToTei)
+	if err != nil {
+		return err
+	}
+
+	// @TODO : Parsing response from grobid to golang and save to DB Mysql
+
+	return nil
 }
