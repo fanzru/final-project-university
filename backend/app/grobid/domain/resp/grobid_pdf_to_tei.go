@@ -6,10 +6,12 @@ import (
 )
 
 type PDFToTEI struct {
-	Body []Body `json:"body"`
+	LenHead int    `json:"len_head"`
+	Body    []Body `json:"body"`
 }
 
 type Body struct {
+	HeadKey   int        `json:"head_key"`
 	Head      string     `json:"head"`
 	Sentences []Sentence `json:"Sentences"`
 }
@@ -20,7 +22,7 @@ type Sentence struct {
 }
 
 func (b *PDFToTEI) MapToTEIParse(data *outbound.TEI) {
-	for _, v := range data.Text.Body.Div {
+	for i, v := range data.Text.Body.Div {
 		sentences := []Sentence{}
 		for _, s := range v.P {
 			strSplit := strings.Split(s.Text, ". ")
@@ -34,8 +36,10 @@ func (b *PDFToTEI) MapToTEIParse(data *outbound.TEI) {
 		}
 
 		b.Body = append(b.Body, Body{
+			HeadKey:   i + 1,
 			Head:      v.Head.Text,
 			Sentences: sentences,
 		})
 	}
+	b.LenHead = len(data.Text.Body.Div)
 }

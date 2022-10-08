@@ -39,7 +39,7 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.CORS())
-	//e.Use(middleware.Logger())
+	e.Use(middleware.Logger())
 	e = routes.NewRoutes(mHandler, e)
 	log.Fatal(e.Start(":8888"))
 }

@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"backend/app/grobid/domain/models"
 	"backend/app/grobid/domain/outbound"
 	"backend/app/grobid/domain/param"
 	"backend/app/grobid/domain/resp"
@@ -11,6 +12,7 @@ import (
 	"encoding/xml"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 
@@ -79,7 +81,6 @@ func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, Param param.GrobidUploadPara
 		return nil, err
 	}
 
-	// @TODO : Parsing response from grobid to golang and save to DB Mysql
 	responseResult := &outbound.TEI{}
 	err = xml.Unmarshal(responseGrobid.Body(), &responseResult)
 	if err != nil {
@@ -88,6 +89,21 @@ func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, Param param.GrobidUploadPara
 
 	result := &resp.PDFToTEI{}
 	result.MapToTEIParse(responseResult)
+
+	sentencesLabel := []models.SentencesLabel{}
+	for _, v := range result.Body {
+		for _, s := range v.Sentences {
+			sentencesLabel = append(sentencesLabel, models.SentencesLabel{
+				PaperId:     0,
+				Head:        v.Head,
+				Text:        s.Text,
+				IsImportant: s.IsImportant,
+			})
+		}
+	}
+
+	// @TODO : Save sentencesLabel to MySQL and save paper to database
+	log.Println(sentencesLabel)
 
 	return result, nil
 }
