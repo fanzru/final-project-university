@@ -60,6 +60,5 @@ func New() (Config, error) {
 
 	// Grobid Service
 	Config.Grobid.GrobidUrlPdfToTei = os.Getenv("GROBID_URL_PDF_TO_TEI")
-
 	return Config, nil
 }

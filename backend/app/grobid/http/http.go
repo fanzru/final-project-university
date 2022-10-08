@@ -21,7 +21,7 @@ func (a GrobidHandler) PdfToTeiParse(ctx echo.Context) error {
 		return response.ResponseErrorBadRequest(ctx, err)
 	}
 
-	err = a.GrobidApp.PdfToTeiParse(ctx, param.GrobidUploadParam{
+	result, err := a.GrobidApp.PdfToTeiParse(ctx, param.GrobidUploadParam{
 		PdfName: pdfName,
 		PdfFile: pdfFile,
 	})
@@ -30,5 +30,5 @@ func (a GrobidHandler) PdfToTeiParse(ctx echo.Context) error {
 		return response.ResponseErrorBadRequest(ctx, err)
 	}
 
-	return response.ResponseSuccessOK(ctx, nil)
+	return response.ResponseSuccessOK(ctx, result)
 }
