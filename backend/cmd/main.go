@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -28,13 +29,17 @@ func main() {
 
 	// services
 	accountsHandler := services.RegisterServiceAccounts(db, cfg)
+	grobidHandler := services.RegisterServiceGrobid(db, cfg)
 
 	mHandler := routes.ModuleHandler{
+		GrobidHandler:  grobidHandler,
 		AccountHandler: accountsHandler,
 		MiddlewareAuth: middlewareAuth,
 	}
 
 	e := echo.New()
+	e.Use(middleware.CORS())
+	e.Use(middleware.Logger())
 	e = routes.NewRoutes(mHandler, e)
 	log.Fatal(e.Start(":8888"))
 }

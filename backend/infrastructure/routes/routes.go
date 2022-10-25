@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	accounts "backend/app/accounts/http"
+	grobid "backend/app/grobid/http"
 	"backend/infrastructure/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -12,6 +13,7 @@ import (
 
 type ModuleHandler struct {
 	AccountHandler accounts.AccountHandler
+	GrobidHandler  grobid.GrobidHandler
 	MiddlewareAuth middleware.MiddlewareAuth
 }
 
@@ -31,5 +33,8 @@ func NewRoutes(h ModuleHandler, app *echo.Echo) *echo.Echo {
 	accounts.GET("/profile", h.MiddlewareAuth.BearerTokenMiddleware(h.AccountHandler.Profile))
 
 	//grobid
+	grobid := app.Group("/grobid")
+	grobid.POST("/pdf-to-tei", h.MiddlewareAuth.BearerTokenMiddleware(h.GrobidHandler.PdfToTeiParse))
+
 	return app
 }
