@@ -13,7 +13,7 @@ type PDFToTEI struct {
 type Body struct {
 	HeadKey   int        `json:"head_key"`
 	Head      string     `json:"head"`
-	Sentences []Sentence `json:"Sentences"`
+	Sentences []Sentence `json:"sentences"`
 }
 
 type Sentence struct {

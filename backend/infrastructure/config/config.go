@@ -14,10 +14,18 @@ type Config struct {
 	Grobid            Grobid
 	IntBycrptPassword int    `env:"INT_BYCRPT_PASSWORD" validate:"required"`
 	JWTTokenSecret    string `env:"JWT_TOKEN_SECRET" validate:"required"`
+	S3                S3     `env:"S3" validate:"required"`
 }
 
 type Grobid struct {
 	GrobidUrlPdfToTei string `env:"GROBID_URL_PDF_TO_TEI" validate:"required"`
+}
+
+type S3 struct {
+	AccessKeyIdS3     string `env:"ACCESS_KEY_ID_S3" validate:"required"`
+	SecretAccessKeyS3 string `env:"SECRET_ACCESS_KEY_S3" validate:"required"`
+	BucketName        string `env:"BUCKET_NAME" validate:"required"`
+	Endpoint          string `env:"ENDPOINT" validate:"required"`
 }
 
 type Database struct {
@@ -60,5 +68,12 @@ func New() (Config, error) {
 
 	// Grobid Service
 	Config.Grobid.GrobidUrlPdfToTei = os.Getenv("GROBID_URL_PDF_TO_TEI")
+
+	// S3 Storage
+	Config.S3.AccessKeyIdS3 = os.Getenv("ACCESS_KEY_ID_S3")
+	Config.S3.SecretAccessKeyS3 = os.Getenv("SECRET_ACCESS_KEY_S3")
+	Config.S3.BucketName = os.Getenv("BUCKET_NAME")
+	Config.S3.Endpoint = os.Getenv("ENDPOINT")
+
 	return Config, nil
 }

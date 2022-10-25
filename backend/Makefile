@@ -11,7 +11,7 @@ migrate-create:
 
 # migration up (craete all table)
 migrate-up:
-migrate -database "mysql://$(MYSQL_DBUSER):$(MYSQL_DBPASS)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/$(MYSQL_DBNAME)" -path migration up
+	migrate -database "mysql://$(MYSQL_DBUSER):$(MYSQL_DBPASS)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/$(MYSQL_DBNAME)" -path migration up
 
 # migration down (drop all table)
 migrate-down:

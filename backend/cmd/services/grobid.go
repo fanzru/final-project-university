@@ -15,8 +15,8 @@ func RegisterServiceGrobid(db database.Connection, cfg config.Config) grobidhand
 	})
 
 	grobidApp := grobidusecase.New(grobidusecase.GrobidApp{
-		GrobidRepo: grobidDB,
-		Cfg:        cfg,
+		Repo: grobidDB,
+		Cfg:  cfg,
 	})
 
 	grobidHandler := grobidhandler.GrobidHandler{
