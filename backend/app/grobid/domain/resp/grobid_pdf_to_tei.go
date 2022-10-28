@@ -1,11 +1,13 @@
 package resp
 
 import (
+	"backend/app/grobid/domain/models"
 	"backend/app/grobid/domain/outbound"
 	"strings"
 )
 
 type PDFToTEI struct {
+	PaperId int64  `json:"paper_id"`
 	LenHead int    `json:"len_head"`
 	Body    []Body `json:"body"`
 }
@@ -17,6 +19,7 @@ type Body struct {
 }
 
 type Sentence struct {
+	SentID      int64  `json:"sent_id"`
 	Text        string `json:"text"`
 	IsImportant bool   `json:"is_important"`
 }
@@ -42,4 +45,40 @@ func (b *PDFToTEI) MapToTEIParse(data *outbound.TEI) {
 		})
 	}
 	b.LenHead = len(data.Text.Body.Div)
+}
+
+func (b *PDFToTEI) MapToResponse(papersUsers *models.PapersUsers, sentencesLabel *[]models.SentencesLabel) {
+	if papersUsers == nil || sentencesLabel == nil {
+		return
+	}
+	b.PaperId = papersUsers.Id
+	headKey := []string{}
+	for _, sent := range *sentencesLabel {
+		headKey = b.appendIfMissing(headKey, sent.Head)
+	}
+	b.LenHead = len(headKey)
+	for i, head := range headKey {
+		body := Body{}
+		for _, sentence := range *sentencesLabel {
+			if sentence.Head == head {
+				body.Head = head
+				body.HeadKey = i + 1
+				body.Sentences = append(body.Sentences, Sentence{
+					SentID:      sentence.Id,
+					Text:        sentence.Text,
+					IsImportant: sentence.IsImportant,
+				})
+			}
+		}
+		b.Body = append(b.Body, body)
+	}
+}
+
+func (b *PDFToTEI) appendIfMissing(slice []string, i string) []string {
+	for _, ele := range slice {
+		if ele == i {
+			return slice
+		}
+	}
+	return append(slice, i)
 }

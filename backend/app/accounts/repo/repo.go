@@ -63,7 +63,7 @@ func (i *AccountsRepo) GetAllPaperByUserId(ctx echo.Context) (*models.Profile, e
 		return nil, err
 	}
 	papersUser := []models.PapersUser{}
-	err = i.MySQL.DB.Table("papers_users").First(&papersUser, "user_id = ?", ctx.Get("user_id")).Error
+	err = i.MySQL.DB.Table("papers_users").Find(&papersUser, "user_id = ?", ctx.Get("user_id")).Error
 	if err != nil {
 		return nil, err
 	}

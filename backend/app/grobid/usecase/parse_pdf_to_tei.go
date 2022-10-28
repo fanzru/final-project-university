@@ -12,7 +12,6 @@ import (
 	"encoding/xml"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -78,29 +77,6 @@ func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, param param.GrobidUploadPara
 	result := &resp.PDFToTEI{}
 	result.MapToTEIParse(responseResult)
 
-	sentencesLabel := []models.SentencesLabel{}
-	for _, v := range result.Body {
-		for _, s := range v.Sentences {
-			sentencesLabel = append(sentencesLabel, models.SentencesLabel{
-				PaperId:     0,
-				Head:        v.Head,
-				Text:        s.Text,
-				IsImportant: s.IsImportant,
-			})
-		}
-	}
-
-	// @TODO : Save sentencesLabel to MySQL and save paper to database
-	log.Println(sentencesLabel)
-
-	/*
-		Transaction
-		1. Upload PDF to S3
-		2. Create Data to table papers_user
-		3. Create Bulk Data to table sentences_label
-	*/
-
-	// @TODO : upload to S3
 	cloudStorage, err := s3.NewS3Object(g.Cfg.S3.Endpoint, g.Cfg.S3.AccessKeyIdS3, g.Cfg.S3.SecretAccessKeyS3, g.Cfg.S3.BucketName, true)
 	if err != nil {
 		return nil, err
@@ -111,12 +87,11 @@ func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, param param.GrobidUploadPara
 		return nil, err
 	}
 
-	log.Println("--------------------------------", a.EndpointPath)
 	userId, err := converter.CtxToInt64(ctx, "user_id")
 	if err != nil {
 		return nil, err
 	}
-	log.Println("--------------------------------", userId)
+
 	papersUsers := models.PapersUsers{
 		UserId:    userId,
 		PaperName: param.PdfName,
@@ -125,7 +100,6 @@ func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, param param.GrobidUploadPara
 		CreatedAt: time.Now(),
 	}
 
-	log.Println(papersUsers)
 	err = g.Repo.SaveUserPapersAndBulkInsertSentencesWithTx(ctx, papersUsers, result)
 	if err != nil {
 		return nil, err
