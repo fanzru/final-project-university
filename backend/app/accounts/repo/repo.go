@@ -13,6 +13,7 @@ import (
 type Impl interface {
 	GetUserByEmail(ctx echo.Context, email string) (models.User, error)
 	CreateUser(ctx echo.Context, user models.User) (models.User, error)
+	GetAllPaperByUserId(ctx echo.Context) (*models.Profile, error)
 }
 type AccountsRepo struct {
 	MySQL database.Connection
@@ -53,4 +54,30 @@ func (i *AccountsRepo) GetUserProfile(ctx echo.Context) (*models.User, error) {
 		return nil, result.Error
 	}
 	return user, nil
+}
+
+func (i *AccountsRepo) GetAllPaperByUserId(ctx echo.Context) (*models.Profile, error) {
+	profile := models.Profile{}
+	err := i.MySQL.DB.Table("users").First(&profile, "id = ?", ctx.Get("user_id")).Error
+	if err != nil {
+		return nil, err
+	}
+	papersUser := []models.PapersUser{}
+	err = i.MySQL.DB.Table("papers_users").First(&papersUser, "user_id = ?", ctx.Get("user_id")).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// for _, paper := range papersUser {
+	// 	sentencesLabel := []models.SentencesLabel{}
+	// 	err = i.MySQL.DB.Table("sentences_labels").Find(&sentencesLabel, "paper_id = ?", paper.Id).Error
+	// 	if err != nil {
+	// 		return err
+	// 	}
+
+	// 	papersUser[0].SentencesLabel = &sentencesLabel
+	// }
+
+	profile.PapersUsers = &papersUser
+	return &profile, nil
 }

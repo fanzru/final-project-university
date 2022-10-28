@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS papers_user;
+DROP TABLE IF EXISTS papers_users;

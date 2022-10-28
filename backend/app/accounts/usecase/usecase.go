@@ -44,7 +44,7 @@ func (i AccountsApp) UserRegister(ctx echo.Context, param request.UserRegisterRe
 	}
 
 	_, err = i.AccountsRepo.CreateUser(ctx, models.User{
-		ID:        0,
+		Id:        0,
 		Name:      param.Name,
 		Email:     param.Email,
 		Password:  string(cryptPass),
@@ -67,7 +67,7 @@ func (i AccountsApp) UserLogin(ctx echo.Context, param request.UserLoginReq) (*r
 		return nil, err
 	}
 
-	token, err := jwt.EncodeToken(user.ID, user.Email, i.Cfg.JWTTokenSecret)
+	token, err := jwt.EncodeToken(user.Id, user.Email, i.Cfg.JWTTokenSecret)
 	if err != nil {
 		return nil, err
 	}
@@ -77,19 +77,18 @@ func (i AccountsApp) UserLogin(ctx echo.Context, param request.UserLoginReq) (*r
 }
 
 func (i AccountsApp) UserProfile(ctx echo.Context) (*response.UserProfileRes, error) {
-	user, err := i.AccountsRepo.GetUserProfile(ctx)
+	profile, err := i.AccountsRepo.GetAllPaperByUserId(ctx)
 	if err != nil {
 		return nil, err
 	}
-
 	userProfileRes := &response.UserProfileRes{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		PhotoUrl:  user.PhotoUrl,
-		CreatedAt: user.CreatedAt,
-		DeletedAt: user.DeletedAt,
+		ID:          profile.Id,
+		Name:        profile.Name,
+		Email:       profile.Email,
+		PhotoUrl:    profile.PhotoUrl,
+		CreatedAt:   profile.CreatedAt,
+		DeletedAt:   profile.DeletedAt,
+		PapersUsers: profile.PapersUsers,
 	}
-
 	return userProfileRes, nil
 }

@@ -1,4 +1,4 @@
-CREATE TABLE `papers_user` (
+CREATE TABLE `papers_users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11),
   `paper_name` LONGTEXT,

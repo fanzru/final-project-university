@@ -25,7 +25,7 @@ func New(g GrobidRepo) GrobidRepo {
 func (g *GrobidRepo) SaveUserPapersAndBulkInsertSentencesWithTx(ctx echo.Context, papersUsers models.PapersUsers, pdfTEI *resp.PDFToTEI) error {
 	tx := g.MySQL.DB.Begin()
 
-	err := tx.Table("papers_user").Create(&papersUsers).Error
+	err := tx.Table("papers_users").Create(&papersUsers).Error
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -43,7 +43,7 @@ func (g *GrobidRepo) SaveUserPapersAndBulkInsertSentencesWithTx(ctx echo.Context
 		}
 	}
 
-	err = tx.Table("sentences_label").CreateInBatches(&sentencesLabel, 100).Error
+	err = tx.Table("sentences_labels").CreateInBatches(&sentencesLabel, 100).Error
 	if err != nil {
 		tx.Rollback()
 		return err

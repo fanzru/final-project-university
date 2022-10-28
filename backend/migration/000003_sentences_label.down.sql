@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS sentences_label;
+DROP TABLE IF EXISTS sentences_labels;
