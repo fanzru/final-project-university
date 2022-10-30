@@ -6,6 +6,9 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
   ],
+  daisyui: {
+    themes: false,
+  },
   darkMode: 'class',
   theme: {
     fontFamily: {
@@ -33,5 +36,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }
