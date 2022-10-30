@@ -7,6 +7,7 @@ import (
 )
 
 type PDFToTEI struct {
+	LinkPdf string `json:"link_pdf"`
 	PaperId int64  `json:"paper_id"`
 	LenHead int    `json:"len_head"`
 	Body    []Body `json:"body"`
@@ -51,6 +52,7 @@ func (b *PDFToTEI) MapToResponse(papersUsers *models.PapersUsers, sentencesLabel
 	if papersUsers == nil || sentencesLabel == nil {
 		return
 	}
+	b.LinkPdf = papersUsers.LinkPdf
 	b.PaperId = papersUsers.Id
 	headKey := []string{}
 	for _, sent := range *sentencesLabel {

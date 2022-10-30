@@ -76,13 +76,29 @@ func (g *GrobidRepo) GetSentencesLabels(ctx echo.Context, paperId int64) (*[]mod
 
 func (g *GrobidRepo) BulkUpdateSentences(ctx echo.Context, request resp.PDFToTEI, isSubmit bool) error {
 	tx := g.MySQL.DB.Begin()
-	for _, head := range request.Body {
-		for _, sent := range head.Sentences {
-			err := tx.Table("sentences_labels").Where("id = ?", sent.SentID).Updates(models.SentencesLabel{IsImportant: sent.IsImportant}).Error
-			if err != nil {
-				tx.Rollback()
-				return err
+	sentences := &[]models.SentencesLabel{}
+	sentUpdates := []models.SentencesLabel{}
+	err := tx.Table("sentences_labels").Where("paper_id = ?", request.PaperId).First(&sentences).Error
+	if err != nil {
+		return err
+	}
+	for _, s := range *sentences {
+		for _, hr := range request.Body {
+			for _, sr := range hr.Sentences {
+				if s.Id == sr.SentID && s.IsImportant != sr.IsImportant {
+					sentUpdates = append(sentUpdates, models.SentencesLabel{
+						Id:          sr.SentID,
+						IsImportant: sr.IsImportant,
+					})
+				}
 			}
+		}
+	}
+	for _, su := range sentUpdates {
+		err := tx.Table("sentences_labels").Where("id = ?", su.Id).Updates(map[string]interface{}{"is_important": su.IsImportant}).Error
+		if err != nil {
+			tx.Rollback()
+			return err
 		}
 	}
 
