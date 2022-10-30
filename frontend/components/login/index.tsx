@@ -30,7 +30,7 @@ const Login = () => {
   
   const onSubmit = handleSubmit(async (data) => {
     try {
-      toast.dismiss();
+      // toast.dismiss();
       const auth = await toast.promise(
         axiosInstance.post('/accounts/login', {
           ...data,
@@ -51,7 +51,6 @@ const Login = () => {
 
      
     } catch (e) {
-      
       toast.info("Login Failed!")
       console.log(e);
     }
@@ -61,7 +60,7 @@ const Login = () => {
     <div className=" flex justify-center">
       <div className="w-[1000px]">
       <div className="mt-20 flex justify-center px-10">
-        <div className="w-[500px] h-[450px]  mt-20 mb-20 rounded-lg shadow-md shadow-md dark:shadow-indigo-500/50">
+        <div className="max-w-[500px] min-h-[450px]  mt-20 mb-20 rounded-lg shadow-md shadow-md dark:shadow-indigo-500/50">
           <form onSubmit={onSubmit} className="form-control w-full border-3 border-white px-10">
             <h1 className="text-center mb-10 mt-5 font-xl">
               Login

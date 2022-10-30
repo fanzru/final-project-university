@@ -12,6 +12,8 @@ import {
   LazyMotion,
   m,
 } from 'framer-motion';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import Navbar from '../components/navbar/index';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
@@ -44,6 +46,7 @@ function MyApp({ Component, pageProps,router }: AppProps) {
       />
       <LazyMotion features={domAnimation}>
         <MantineProvider withGlobalStyles withNormalizeCSS>
+        <ToastContainer pauseOnFocusLoss={false} />
           <div className="min-h-screen flex flex-col h-full">
             <Navbar/>
             <AnimatePresence
