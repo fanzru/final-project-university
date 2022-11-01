@@ -32,7 +32,8 @@ func (b *PDFToTEI) MapToTEIParse(data *outbound.TEI) {
 			strSplit := strings.Split(s.Text, ". ")
 			for _, s2 := range strSplit {
 				sentences = append(sentences, Sentence{
-					Text:        s2 + ".",
+					// can customize to add dot or not in Text field.
+					Text:        s2,
 					IsImportant: false,
 				})
 			}

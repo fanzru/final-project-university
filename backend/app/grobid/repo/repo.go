@@ -78,22 +78,26 @@ func (g *GrobidRepo) BulkUpdateSentences(ctx echo.Context, request resp.PDFToTEI
 	tx := g.MySQL.DB.Begin()
 	sentences := &[]models.SentencesLabel{}
 	sentUpdates := []models.SentencesLabel{}
-	err := tx.Table("sentences_labels").Where("paper_id = ?", request.PaperId).First(&sentences).Error
+	err := tx.Table("sentences_labels").Where("paper_id = ?", request.PaperId).Find(&sentences).Error
 	if err != nil {
 		return err
 	}
+
 	for _, s := range *sentences {
 		for _, hr := range request.Body {
 			for _, sr := range hr.Sentences {
-				if s.Id == sr.SentID && s.IsImportant != sr.IsImportant {
-					sentUpdates = append(sentUpdates, models.SentencesLabel{
-						Id:          sr.SentID,
-						IsImportant: sr.IsImportant,
-					})
+				if s.Id == sr.SentID {
+					if s.IsImportant != sr.IsImportant {
+						sentUpdates = append(sentUpdates, models.SentencesLabel{
+							Id:          sr.SentID,
+							IsImportant: sr.IsImportant,
+						})
+					}
 				}
 			}
 		}
 	}
+
 	for _, su := range sentUpdates {
 		err := tx.Table("sentences_labels").Where("id = ?", su.Id).Updates(map[string]interface{}{"is_important": su.IsImportant}).Error
 		if err != nil {
