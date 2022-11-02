@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8888',
+  baseURL: 'https://api.skripsi.fanzru.dev',
 });

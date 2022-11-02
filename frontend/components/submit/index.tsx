@@ -40,7 +40,7 @@ const SubmitPaper = () => {
       const res = await toast.promise(
         axios({
           method: 'POST',
-          url: 'http://localhost:8888/grobid/pdf-to-tei',
+          url: 'https://api.skripsi.fanzru.dev/grobid/pdf-to-tei',
           data: bodyFormData,
           headers: { Authorization: `Bearer ${token}` },
         }),
@@ -86,9 +86,6 @@ const SubmitPaper = () => {
                 required: 'Paper title is Required',
               })}
             />
-            
-            
-            
             <label className="label">
               <span className="label-text font-bold">Please choose PDF article</span>
             </label>
