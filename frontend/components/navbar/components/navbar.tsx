@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import {useEffect} from 'react';
-
+import { HiOutlineLogout } from 'react-icons/hi';
 export const Routes = [
   {
     link: '/',
@@ -17,6 +17,10 @@ export const Routes = [
     name: 'Register',
   },
   {
+    link: '/submit',
+    name: 'Submit',
+  },
+  {
     link: '/profile',
     name: 'Profile',
   }
@@ -25,16 +29,15 @@ export const Routes = [
 const Navbar = () => {
   const { pathname } = useRouter();
   let accessToken: any
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      accessToken = localStorage.getItem('token');
-    }
-  },[])
+  if (typeof window !== 'undefined') {
+    accessToken = localStorage.getItem('token');
+  }
+  
 
   return (
     <nav className={clsx('items-center -ml-3.5 hidden md:flex')}>
         {Routes.map((route) => {
-          if (route.name === "Profile" && (accessToken === null)) {
+          if ((route.name === "Profile" || route.name === "Submit") && (accessToken === null)) {
             return <></>
           }
           if (((route.name === "Login" || (route.name === "Register")) && (accessToken !== null))){

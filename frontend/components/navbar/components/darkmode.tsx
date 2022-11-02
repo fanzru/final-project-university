@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { HiSun, HiMoon } from 'react-icons/hi';
+import { HiSun, HiMoon,HiOutlineLogout } from 'react-icons/hi';
 import Button from '../components/button';
 import clsx from 'clsx';
 

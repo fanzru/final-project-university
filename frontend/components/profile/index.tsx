@@ -2,11 +2,17 @@ import Table from './components/table'
 import {axiosInstance} from '../../lib/axios';
 import {useState,useEffect} from 'react';
 import {Profile} from "../../types/profile"
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 const Profile = () => {
+  const router = useRouter();
   if (typeof window !== 'undefined') {
     var token = localStorage.getItem('token');
   }
   const [dataUser, setDataUser] = useState<Profile>();
+  if (typeof window !== 'undefined') {
+    var token = localStorage.getItem('token');
+  }
   const getProfil = () => {
     axiosInstance
       .get('/accounts/profile', {
@@ -19,11 +25,18 @@ const Profile = () => {
       })
       .catch((err) => {
         console.log(err);
+        router.push("/")
       });
   };
   useEffect(() => {
-  
-
+    if (typeof window !== 'undefined') {
+      var token = localStorage.getItem('token');
+      if (token === "undefined") {
+        toast.info("Session not found!")
+        router.push("/login")
+       
+      }
+    }
     getProfil();
   }, []);
 

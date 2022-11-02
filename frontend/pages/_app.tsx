@@ -18,6 +18,7 @@ import Navbar from '../components/navbar/index';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
 import '../styles/nprogress.css';
+import { Worker } from '@react-pdf-viewer/core';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -46,27 +47,29 @@ function MyApp({ Component, pageProps,router }: AppProps) {
       />
       <LazyMotion features={domAnimation}>
         <MantineProvider withGlobalStyles withNormalizeCSS>
-        <ToastContainer pauseOnFocusLoss={false} />
-          <div className="min-h-screen flex flex-col h-full">
-            <Navbar/>
-            <AnimatePresence
-              mode='wait'
-              initial={false}
-              onExitComplete={() => window.scrollTo(0, 0)}
-            >
-              <m.div
-                key={router.asPath}
-                variants={variants}
-                initial='hidden'
-                animate='enter'
-                exit='exit'
-                transition={{ ease: 'easeInOut', duration: 0.5 }}
-                className={clsx('flex flex-col h-full flex-grow')}
+          <ToastContainer pauseOnFocusLoss={false} />
+          <Worker workerUrl='https://unpkg.com/pdfjs-dist@2.14.305/build/pdf.worker.min.js'>
+            <div className="min-h-screen flex flex-col h-full">
+              <Navbar/>
+              <AnimatePresence
+                mode='wait'
+                initial={false}
+                onExitComplete={() => window.scrollTo(0, 0)}
               >
-                <Component {...pageProps} />
-              </m.div>
-            </AnimatePresence>
-          </div>
+                <m.div
+                  key={router.asPath}
+                  variants={variants}
+                  initial='hidden'
+                  animate='enter'
+                  exit='exit'
+                  transition={{ ease: 'easeInOut', duration: 0.5 }}
+                  className={clsx('flex flex-col h-full flex-grow')}
+                >
+                  <Component {...pageProps} />
+                </m.div>
+              </AnimatePresence>
+            </div>
+          </Worker>
         </MantineProvider>
       </LazyMotion>
     </ThemeProvider>

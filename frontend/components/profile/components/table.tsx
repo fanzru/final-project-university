@@ -8,16 +8,16 @@ interface TableInterface {
   data: PapersUsers[] | any;
 }
 const Table:FC<TableInterface> = ({data})=> {
+  
   return (
     <div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-[300px]">
         <table className="table w-full">
           <thead>
             <tr>
               <th></th>
               <th>Paper Title</th>
               <th>Features</th>
-          
             </tr>
           </thead>
           <tbody>
@@ -52,15 +52,18 @@ const Table:FC<TableInterface> = ({data})=> {
                               show pdf
                             </a>
                           </Link>
-                          <button
-                            className='btn btn-primary btn-xs gap-1 text-white'
-                          >
-                            <AiFillEdit/>
-                            Edit
-                          </button>
+                          <Link href={`/annotation?paper_id=${v.id}`}>
+                            <a
+                              className='btn btn-primary btn-xs gap-1 text-white'
+                            >
+                              <AiFillEdit/>
+                              Edit
+                            </a>
+                          </Link>
+                         
                           <div>
                             {
-                              v.is_done? 
+                              !v.is_done? 
                               <div className="badge bg-gray-500 border-gray-500 gap-2 font-bold text-xs">
                                 DRAFT
                               </div>: <></>

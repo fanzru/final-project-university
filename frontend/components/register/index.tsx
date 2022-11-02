@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { toast } from 'react-toastify';
 import { axiosInstance } from '../../lib/axios';
 import { useRouter } from 'next/router';
+import {useEffect} from 'react';
 
 type RegisterType = {
   name: string;
@@ -28,7 +29,26 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterType>();
-  
+  if (typeof window !== 'undefined') {
+    var token = localStorage.getItem('token');
+  }
+  const getProfil = () => {
+    axiosInstance
+      .get('/accounts/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        router.push("/profile")
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getProfil();
+  }, []);
   const onSubmit = handleSubmit(async (data) => {
     try {
       toast.dismiss();
