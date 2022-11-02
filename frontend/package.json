@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 3334"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
