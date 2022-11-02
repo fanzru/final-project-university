@@ -10,7 +10,7 @@ import (
 )
 
 type Repo interface {
-	SaveUserPapersAndBulkInsertSentencesWithTx(ctx echo.Context, papersUsers models.PapersUsers, pdfTEI *resp.PDFToTEI) error
+	SaveUserPapersAndBulkInsertSentencesWithTx(ctx echo.Context, papersUsers models.PapersUsers, pdfTEI *resp.PDFToTEI) (int64, error)
 	GetPaperUsers(ctx echo.Context, paperId int64) (*models.PapersUsers, error)
 	GetSentencesLabels(ctx echo.Context, paperId int64) (*[]models.SentencesLabel, error)
 	BulkUpdateSentences(ctx echo.Context, request resp.PDFToTEI, isSubmit bool) error
@@ -25,13 +25,13 @@ func New(g GrobidRepo) GrobidRepo {
 	return g
 }
 
-func (g *GrobidRepo) SaveUserPapersAndBulkInsertSentencesWithTx(ctx echo.Context, papersUsers models.PapersUsers, pdfTEI *resp.PDFToTEI) error {
+func (g *GrobidRepo) SaveUserPapersAndBulkInsertSentencesWithTx(ctx echo.Context, papersUsers models.PapersUsers, pdfTEI *resp.PDFToTEI) (int64, error) {
 	tx := g.MySQL.DB.Begin()
 
 	err := tx.Table("papers_users").Create(&papersUsers).Error
 	if err != nil {
 		tx.Rollback()
-		return err
+		return 0, err
 	}
 
 	sentencesLabel := []models.SentencesLabel{}
@@ -49,11 +49,11 @@ func (g *GrobidRepo) SaveUserPapersAndBulkInsertSentencesWithTx(ctx echo.Context
 	err = tx.Table("sentences_labels").CreateInBatches(&sentencesLabel, 100).Error
 	if err != nil {
 		tx.Rollback()
-		return err
+		return 0, err
 	}
 
 	tx.Commit()
-	return nil
+	return papersUsers.Id, nil
 }
 
 func (g *GrobidRepo) GetPaperUsers(ctx echo.Context, paperId int64) (*models.PapersUsers, error) {

@@ -100,10 +100,12 @@ func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, param param.GrobidUploadPara
 		CreatedAt: time.Now(),
 	}
 
-	err = g.Repo.SaveUserPapersAndBulkInsertSentencesWithTx(ctx, papersUsers, result)
+	paperId, err := g.Repo.SaveUserPapersAndBulkInsertSentencesWithTx(ctx, papersUsers, result)
 	if err != nil {
 		return nil, err
 	}
 
+	result.PaperId = paperId
+	result.LinkPdf = a.EndpointPath
 	return result, nil
 }
