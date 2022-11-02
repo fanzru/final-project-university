@@ -18,14 +18,16 @@ type GrobidHandler struct {
 
 func (a GrobidHandler) PdfToTeiParse(ctx echo.Context) error {
 	pdfName := ctx.FormValue("pdf_name")
+	domainPaper := ctx.FormValue("domain_paper")
 	pdfFile, err := ctx.FormFile("pdf_file")
 	if err != nil {
 		return response.ResponseErrorBadRequest(ctx, err)
 	}
 
 	result, err := a.GrobidApp.PdfToTeiParse(ctx, param.GrobidUploadParam{
-		PdfName: pdfName,
-		PdfFile: pdfFile,
+		DomainPaper: domainPaper,
+		PdfName:     pdfName,
+		PdfFile:     pdfFile,
 	})
 
 	if err != nil {

@@ -21,7 +21,6 @@ import (
 )
 
 func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, param param.GrobidUploadParam) (*resp.PDFToTEI, error) {
-
 	src, err := param.PdfFile.Open()
 	if err != nil {
 		return nil, err
@@ -93,11 +92,12 @@ func (g *GrobidApp) PdfToTeiParse(ctx echo.Context, param param.GrobidUploadPara
 	}
 
 	papersUsers := models.PapersUsers{
-		UserId:    userId,
-		PaperName: param.PdfName,
-		LinkPdf:   a.EndpointPath,
-		IsDone:    false,
-		CreatedAt: time.Now(),
+		DomainPaper: param.DomainPaper,
+		UserId:      userId,
+		PaperName:   param.PdfName,
+		LinkPdf:     a.EndpointPath,
+		IsDone:      false,
+		CreatedAt:   time.Now(),
 	}
 
 	paperId, err := g.Repo.SaveUserPapersAndBulkInsertSentencesWithTx(ctx, papersUsers, result)
