@@ -11,16 +11,16 @@ cd ~/skripsi/final-project-university
 git fetch origin main
 git reset --hard origin/main
 
-# echo "Moving to backend folder"
-# cd ~/skripsi/final-project-university/backend
+echo "Moving to backend folder"
+cd ~/skripsi/final-project-university/backend
 
-# echo "Installing dependencies 🛠"
-# go mod tidy
+echo "Installing dependencies 🛠"
+go mod tidy
 
-# echo "Restart pm2 service backend 🔥"
-# pm2 restart deploy.json
+echo "Restart pm2 service backend 🔥"
+pm2 restart deploy.json
 
-# echo "Deploying Backend Application Successfully Yeayyyy ......."
+echo "Deploying Backend Application Successfully Yeayyyy ......."
 
 echo "========================= FRONT END ========================="
 
