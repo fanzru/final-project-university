@@ -1,0 +1,8 @@
+{
+  "apps": [
+    {
+      "name": "backend - final project university",
+      "script": "make run"
+    }
+  ]
+}

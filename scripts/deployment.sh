@@ -18,7 +18,7 @@ echo "Installing dependencies 🛠"
 go mod tidy
 
 echo "Restart pm2 service backend 🔥"
-pm2 restart deploy.json
+pm2 restart pm2.json
 
 echo "Deploying Backend Application Successfully Yeayyyy ......."
 
