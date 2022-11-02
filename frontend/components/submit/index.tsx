@@ -9,6 +9,7 @@ import { FileUploader } from 'react-drag-drop-files';
 import axios from 'axios';
 type SubmitPaperType = {
   pdf_title: string;
+  domain_paper: string;
 };
 
 
@@ -34,6 +35,7 @@ const SubmitPaper = () => {
     try {
       toast.dismiss();
       let bodyFormData = new FormData();
+      bodyFormData.append("domain_paper",data.domain_paper)
       bodyFormData.append('pdf_name', data.pdf_title);
       bodyFormData.append('pdf_file',file!)
       console.log("pdf_name : ", data.pdf_title);
@@ -64,8 +66,8 @@ const SubmitPaper = () => {
   return (
     <div className=" flex justify-center">
       <div className="w-[1000px]">
-      <div className="mt-20 flex justify-center px-10">
-        <div className="w-[500px] h-[550px]  mt-20 mb-20 rounded-lg shadow-md shadow-md dark:shadow-indigo-500/50">
+      <div className="mt-10 flex justify-center px-10">
+        <div className="w-[500px] h-[600px]  mt-20 mb-20 rounded-lg shadow-md shadow-md dark:shadow-indigo-500/50">
           <form onSubmit={onSubmit} className="form-control w-full border-3 border-white px-10">
             <h1 className="text-center mb-10 mt-5 font-xl">
               Upload Your Paper
@@ -86,6 +88,24 @@ const SubmitPaper = () => {
                 required: 'Paper title is Required',
               })}
             />
+
+            <label className="label">
+              <span className="label-text font-bold">Domain Paper</span>
+              {errors.domain_paper && (
+                  <span className='label-text-alt text-error'>
+                    {errors.domain_paper?.message}
+                  </span>
+                )}
+            </label>
+            <input 
+              type="text"
+              placeholder="Type here"
+              className="input input-bordered w-full dark:bg-dark-500"
+              {...register('domain_paper', {
+                required: 'Domain paper is Required',
+              })}
+            />
+
             <label className="label">
               <span className="label-text font-bold">Please choose PDF article</span>
             </label>
