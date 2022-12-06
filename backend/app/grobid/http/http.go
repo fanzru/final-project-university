@@ -37,6 +37,27 @@ func (a GrobidHandler) PdfToTeiParse(ctx echo.Context) error {
 	return response.ResponseSuccessOK(ctx, result)
 }
 
+func (a GrobidHandler) PdfToTeiParseAsParagraf(ctx echo.Context) error {
+	pdfName := ctx.FormValue("pdf_name")
+	domainPaper := ctx.FormValue("domain_paper")
+	pdfFile, err := ctx.FormFile("pdf_file")
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+
+	result, err := a.GrobidApp.PdfToTeiParseAsParagraf(ctx, param.GrobidUploadParam{
+		DomainPaper: domainPaper,
+		PdfName:     pdfName,
+		PdfFile:     pdfFile,
+	})
+
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+
+	return response.ResponseSuccessOK(ctx, result)
+}
+
 func (a GrobidHandler) GetDetailPaperById(ctx echo.Context) error {
 	s := ctx.Param("id")
 	id, err := strconv.ParseInt(s, 10, 64)

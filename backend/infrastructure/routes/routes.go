@@ -35,6 +35,7 @@ func NewRoutes(h ModuleHandler, app *echo.Echo) *echo.Echo {
 	//grobid
 	grobid := app.Group("/grobid")
 	grobid.POST("/pdf-to-tei", h.MiddlewareAuth.BearerTokenMiddleware(h.GrobidHandler.PdfToTeiParse))
+	grobid.POST("/pdf-to-tei-paragraph", h.MiddlewareAuth.BearerTokenMiddleware(h.GrobidHandler.PdfToTeiParseAsParagraf))
 	grobid.GET("/detail-paper/:id", h.MiddlewareAuth.BearerTokenMiddleware(h.GrobidHandler.GetDetailPaperById))
 	grobid.POST("/paper-edit/:isSubmit", h.MiddlewareAuth.BearerTokenMiddleware(h.GrobidHandler.EditPaper))
 
