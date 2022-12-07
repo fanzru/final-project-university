@@ -1,0 +1,8 @@
+{
+  "apps": [
+    {
+      "name": "fastapi - final project university",
+      "script": "uvicorn main:app --reload"
+    }
+  ]
+}
