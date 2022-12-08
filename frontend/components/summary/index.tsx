@@ -29,7 +29,7 @@ const Login = () => {
       })
       .catch((err) => {
         console.log(err);
-        router.push("/")
+        router.push("/login")
       });
   };
   useEffect(() => {
@@ -67,12 +67,12 @@ const Login = () => {
 
   return (
     <div className=" flex justify-center">
-      <div className="w-full grid grid-rows-2 border-2 md:grid-cols-2">
+      <div className="w-full grid md:grid-cols-2">
         <div className="mt-5 flex justify-center px-5 ">
           <div className="max-w-[1000px] w-full min-h-[450px] mt-20 mb-20 rounded-lg ">
             <form onSubmit={onSubmit} className="form-control w-full border-3 border-white px-10">
               <h1 className="text-center mb-5 mt-5 font-xl">
-                Summary
+                Text
               </h1>
               <label className="label">
                 <span className="label-text font-bold">Text</span>
