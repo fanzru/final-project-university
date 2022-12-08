@@ -1,10 +1,19 @@
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 app = FastAPI()
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 model_name = '/home/fanzruskripsi/skripsi/final-project-university/fastapi/model/t5/t5-small-finetuned-xlsum-concat-multi-news'
 tokenizer = AutoTokenizer.from_pretrained(model_name)
