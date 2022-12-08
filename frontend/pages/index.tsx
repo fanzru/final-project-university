@@ -14,12 +14,12 @@ const Home: NextPage = () => {
         <h1 className="text-6xl font-bold">
           Welcome to{' '}
           <a className="text-blue-600" href="https://fanzru.dev">
-            Skripsi Fanzru.
+            SummaRu
           </a>
         </h1>
 
         <p className="mt-3 mb-2 text-xl">
-        {`This website is under construction `}
+        {`website summarizer and annotation tools`}
         </p>
         <code className="rounded-md bg-gray-100 p-2 font-mono text-xs dark:text-black">
             Stay Tune Guys.
