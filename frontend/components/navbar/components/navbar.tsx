@@ -9,6 +9,10 @@ export const Routes = [
     name: 'Home',
   },
   {
+    link: '/feature',
+    name: 'Feature',
+  },
+  {
     link: '/login',
     name: 'Login',
   },
