@@ -6,6 +6,10 @@ import (
 	"strings"
 )
 
+type CSVresp struct {
+	PaperDetail    models.PapersUsers      `json:"paper_detail"`
+	SentencesLabel []models.SentencesLabel `json:"sentences_label"`
+}
 type PDFToTEI struct {
 	LinkPdf string                   `json:"link_pdf"`
 	PaperId int64                    `json:"paper_id"`

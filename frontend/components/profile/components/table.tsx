@@ -1,14 +1,33 @@
 import Link from 'next/link';
 import {PapersUsers} from "../../../types/profile"
 import { FC } from 'react';
-
-import { AiFillEdit } from 'react-icons/ai';
-
+import {axiosInstance} from '../../../lib/axios';
+import { AiFillEdit,AiOutlineCloudDownload } from 'react-icons/ai';
+import {exportData} from '../../../lib/exportData';
+import { toast } from 'react-toastify';
 interface TableInterface {
   data: PapersUsers[] | any;
 }
 const Table:FC<TableInterface> = ({data})=> {
-  
+  if (typeof window !== 'undefined') {
+    var token = localStorage.getItem('token');
+  }
+  const getCsv = (id: number) => {
+    axiosInstance
+      .get(`/grobid/detail-paper-csv/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.data)
+        exportData(res.data.data.sentences_label, 'label_' + res.data.data.paper_detail.paper_name);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Download Error!');
+      });
+  };
   return (
     <div>
       <div className="overflow-x-auto max-h-[300px]">
@@ -60,7 +79,16 @@ const Table:FC<TableInterface> = ({data})=> {
                               Edit
                             </a>
                           </Link>
-                         
+                          <button
+                            onClick={()=>{getCsv(v.id)}}
+                          >
+                            <a
+                              className='btn btn-primary btn-xs gap-1 text-white'
+                            >
+                              <AiOutlineCloudDownload/>
+                              DOWNLOAD
+                            </a>
+                          </button>
                           <div>
                             {
                               !v.is_done? 
@@ -69,6 +97,7 @@ const Table:FC<TableInterface> = ({data})=> {
                               </div>: <></>
                             }
                           </div>
+                          
                         </div>
                         
                       </td>

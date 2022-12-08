@@ -73,6 +73,21 @@ func (a GrobidHandler) GetDetailPaperById(ctx echo.Context) error {
 	return response.ResponseSuccessOK(ctx, resp)
 }
 
+func (a GrobidHandler) GetDetailPaperByIdToCSV(ctx echo.Context) error {
+	s := ctx.Param("id")
+	id, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+
+	resp, err := a.GrobidApp.GetSentencesLabelsCSV(ctx, id)
+	if err != nil {
+		return response.ResponseErrorBadRequest(ctx, err)
+	}
+
+	return response.ResponseSuccessOK(ctx, resp)
+}
+
 func (a GrobidHandler) EditPaper(ctx echo.Context) error {
 	s := ctx.Param("isSubmit")
 	isSubmit, err := strconv.ParseBool(s)
