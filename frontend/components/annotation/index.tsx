@@ -70,7 +70,7 @@ const Annotation:FC<AnnotationInterface>  = ({paper_id}) => {
           error: 'Submit Failed!',
         }
       );
-      router.push(`/annotation?paper_id=${dataDetailPaper?.paper_id}`)
+      router.push(`/profile`)
     } catch (err) {
       console.log("Submit Paper : ",err)
     }
