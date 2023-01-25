@@ -1,6 +1,6 @@
 import Table from './components/table'
 import {axiosInstance} from '../../lib/axios';
-
+import {exportData} from '../../lib/exportData';
 import {useState,useEffect} from 'react';
 import {Profile} from "../../types/profile"
 import { useRouter } from 'next/router';
@@ -41,6 +41,22 @@ const Profile = () => {
     getProfil();
   }, []);
 
+  const getCsv = (id: number) => {
+    axiosInstance
+      .get(`/grobid/detail-paper-csv/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        exportData(res.data.value, 'label_' + res.data.data.paper_detail.paper_name);
+      })
+      .catch((err) => {
+        if (err.response.data.code === 400)
+          toast.error(err.response.data.message);
+        else toast.error('Download Error!');
+      });
+  };
  
 
   return(
