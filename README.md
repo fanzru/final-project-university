@@ -4,5 +4,5 @@ Final project journey to get Bachelor Degree of Computer Science with topic  `Te
 
 Stacks : Golang, MySQL, Nginx, Ubuntu...
 
-> "Otw Get Bachelor Degree of Computer Science at Telkom University" - 
+> "Already Get Bachelor Degree of Computer Science at Telkom University" - 
 > Ananda Affan Fattahila
